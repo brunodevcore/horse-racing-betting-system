@@ -1,4 +1,4 @@
-package malapata.modelo;
+package malapata.dominio;
 
 public class ModalidadTriple extends ModalidadDeApuesta {
     

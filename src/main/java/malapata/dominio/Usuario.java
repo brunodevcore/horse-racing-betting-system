@@ -1,4 +1,4 @@
-package malapata.modelo;
+package malapata.dominio;
 
 import lombok.Getter;
 
@@ -18,7 +18,7 @@ public abstract class Usuario {
         this.contrasena = contrasena;
     }
 
-    public boolean esValida(String nombreUsuario, String contrasena){
-        return this.nombreUsuario.equals(nombreUsuario) && this.contrasena.equals(contrasena);
+    public boolean esValida(Credencial credencial){
+        return this.nombreUsuario.equals(credencial.getNombreUsuario()) && this.contrasena.equals(credencial.getContrasena());
     }
 }

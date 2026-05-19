@@ -1,4 +1,4 @@
-package malapata.modelo;
+package malapata.dominio;
 
 public class ModalidadSuper extends ModalidadDeApuesta {
     

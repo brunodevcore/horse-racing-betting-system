@@ -1,4 +1,4 @@
-package malapata.modelo;
+package malapata.dominio;
 
 import lombok.Getter;
 

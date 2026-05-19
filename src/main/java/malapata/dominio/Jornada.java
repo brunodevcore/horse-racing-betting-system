@@ -1,4 +1,4 @@
-package malapata.modelo;
+package malapata.dominio;
 
 import java.time.LocalDate;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package malapata.modelo;
+package malapata.dominio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,5 +27,13 @@ public class Carrera {
         this.estado = "Definida";
         this.participaciones = new ArrayList<>();
         this.ganador = null;
+    }
+
+    public void agregarParticipacion(Caballo caballo, int numero){
+        participaciones.add(new Participacion(numero, caballo));
+    }
+
+    public void cerrar(){
+        this.estado = "Cerrada";
     }
 }
