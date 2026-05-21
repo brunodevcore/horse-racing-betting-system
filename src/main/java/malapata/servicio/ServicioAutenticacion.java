@@ -26,7 +26,7 @@ public class ServicioAutenticacion {
                 return login;
             }
         }
-        throw new AutenticacionException("Acceso no permitido");
+        throw new AutenticacionException("Acceso denegado");
     }
 
     public Login autenticarAdministrador(Credencial credencial) throws AutenticacionException{
@@ -42,7 +42,7 @@ public class ServicioAutenticacion {
                 return login; 
             }
         }
-        throw new AutenticacionException("Acceso no permitido");
+        throw new AutenticacionException("Acceso denegado");
     }
 
     public void logout(Login login){
