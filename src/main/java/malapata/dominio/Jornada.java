@@ -18,4 +18,8 @@ public class Jornada {
         this.carreras = new ArrayList<>();
     }
     
+    public void agregarCarrera(Carrera carrera){
+        carreras.add(carrera);
+    }
+    
 }

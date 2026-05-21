@@ -33,7 +33,16 @@ public class Carrera {
         participaciones.add(new Participacion(numero, caballo));
     }
 
+    public void abrir(){
+        this.estado = "Abierta";
+    }
+
     public void cerrar(){
         this.estado = "Cerrada";
+    }
+
+    public void finalizar(Caballo ganador){
+        this.estado = "Finalizada";
+        this.ganador = ganador;
     }
 }
