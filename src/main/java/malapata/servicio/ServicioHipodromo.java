@@ -2,10 +2,12 @@ package malapata.servicio;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
 import malapata.dominio.*;
 
 public class ServicioHipodromo {
     
+    @Getter
     private Hipodromo hipodromo;
 
     public ServicioHipodromo(){
@@ -70,7 +72,7 @@ public class ServicioHipodromo {
         for(Participacion p : carreraPasada1.getParticipaciones()){
             int cantidadApuestas = (int)(Math.random() * 11) + 10;
             for(int i = 0; i < cantidadApuestas ; i++){
-                agregarApuestas(p, hipodromo.getJugadores().get(i % 3), hipodromo.getModalidades().get(i % 3), (int)(Math.random() * 9900) + 100);
+                agregarApuestas(p, hipodromo.getJugadores().get(i % 3), hipodromo.getModalidades().get(i % 3), ((int)(Math.random() * 9900) + 100));
             }
         }
 
@@ -86,7 +88,7 @@ public class ServicioHipodromo {
         for(Participacion p : carreraPasada2.getParticipaciones()){
             int cantidadApuestas = (int)(Math.random() * 11) + 10;
             for(int i = 0; i < cantidadApuestas ; i++){
-                agregarApuestas(p, hipodromo.getJugadores().get(i % 3), hipodromo.getModalidades().get(i % 3), (int)(Math.random() * 9900) + 100);
+                agregarApuestas(p, hipodromo.getJugadores().get(i % 3), hipodromo.getModalidades().get(i % 3), ((int)(Math.random() * 9900) + 100) * 10);
             }
         }
 
