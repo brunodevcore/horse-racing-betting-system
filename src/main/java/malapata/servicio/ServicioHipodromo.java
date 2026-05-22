@@ -128,4 +128,43 @@ public class ServicioHipodromo {
         participacion.agregarApuestas(apuesta);
     }
 
+    public Jornada getJornadaActual(){
+        LocalDate hoy = LocalDate.now();
+        Jornada jornadaActual = null;
+
+        for(Jornada j : hipodromo.getJornadas()){
+            if(j.getFecha().equals(hoy)){
+                if(jornadaActual == null || j.getFecha().isAfter(jornadaActual.getFecha())){
+                    jornadaActual = j;
+                }
+            }
+        }
+        return jornadaActual;
+    }
+
+    public Jornada getJornadaAnterior(LocalDate fecha){
+        Jornada anterior = null;
+
+        for(Jornada j : hipodromo.getJornadas()){
+            if(j.getFecha().isBefore(fecha)){
+                if(anterior == null || j.getFecha().isAfter(anterior.getFecha())){
+                    anterior = j;
+                }
+            }
+        }
+        return anterior;
+    }
+
+    public Jornada getJornadaSiguiente(LocalDate fecha){
+        Jornada siguiente = null;
+
+        for(Jornada j : hipodromo.getJornadas()){
+            if(j.getFecha().isAfter(fecha)){
+                if(siguiente == null || j.getFecha().isBefore(siguiente.getFecha())){
+                    siguiente = j;
+                }
+            }
+        }
+        return siguiente;
+    }
 }

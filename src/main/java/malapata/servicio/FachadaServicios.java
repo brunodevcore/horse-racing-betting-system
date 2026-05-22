@@ -1,7 +1,10 @@
 package malapata.servicio;
 
+import java.time.LocalDate;
+
 import malapata.dominio.Credencial;
 import malapata.dominio.Login;
+import malapata.dominio.Jornada;
 import malapata.excepciones.AutenticacionException;
 
 public class FachadaServicios {
@@ -34,4 +37,17 @@ public class FachadaServicios {
     public void logout(Login login){
         servicioAutenticacion.logout(login);
     }
+
+    public Jornada getJornadaActual(){
+        return servicioHipodromo.getJornadaActual();
+    }
+
+    public Jornada getJornadaAnterior(LocalDate fecha){
+        return servicioHipodromo.getJornadaAnterior(fecha);
+    }
+
+    public Jornada getJornadaSiguiente(LocalDate fecha){
+        return servicioHipodromo.getJornadaSiguiente(fecha);
+    }
+
 }

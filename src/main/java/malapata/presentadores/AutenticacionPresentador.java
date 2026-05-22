@@ -1,7 +1,5 @@
 package malapata.presentadores;
 
-
-
 import jakarta.servlet.http.HttpSession;
 import malapata.dominio.Credencial;
 import malapata.dominio.Jugador;
@@ -12,7 +10,6 @@ import malapata.servicio.FachadaServicios;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 public class AutenticacionPresentador {
