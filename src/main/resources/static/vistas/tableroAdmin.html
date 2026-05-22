@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero de Control - MalaPata</title>
+</head>
+<body>
+    <h1>Tablero de Control - MalaPata</h1>
+    
+    <div id="errorMessage"></div>
+
+    <div>
+        <p>Administrador: <strong id="nombreAdmin">Cargando...</strong></p>
+    </div>
+
+    <div>
+        <p>Fecha de la Jornada: <span id="jornadaFecha">-</span></p>
+        <button id="btnAnterior">Jornada Anterior</button>
+        <button id="btnSiguiente">Jornada Siguiente</button>
+    </div>
+
+    <div>
+        <p>Total de Carreras: <span id="cantidadCarreras">0</span></p>
+        <p>Carreras Finalizadas: <span id="cantidadFinalizadas">0</span></p>
+        <p>Carreras por Correr: <span id="cantidadFaltanCorrer">0</span></p>
+    </div>
+
+    <div>
+        <h2>Carreras Finalizadas</h2>
+        <div id="carrerasFinalizadasContainer"></div>
+    </div>
+
+    <div>
+        <h2>Próximas Carreras</h2>
+        <div id="proximasCarrerasContainer"></div>
+    </div>
+
+    <script type="module">
+        // Crear instancia de CommandDispatcher
+        import dispatcher from './CommandDispatcher.js';
+
+        // Registrar la vista
+        const view = dispatcher.registerView('TableroAdmin', {
+            urlInicio: '/admin/inicializarVista'
+        });
+
+        // Registrar handlers para los comandos
+        view.handler('nombreAdmin', (data) => {
+            document.getElementById('nombreAdmin').textContent = data;
+        });
+
+        view.handler('jornada', (data) => {
+            document.getElementById('jornadaFecha').textContent = data.fecha || '-';
+            document.getElementById('cantidadCarreras').textContent = data.cantidadCarreras || 0;
+            document.getElementById('cantidadFinalizadas').textContent = data.cantidadCarrerasFinalizadas || 0;
+            document.getElementById('cantidadFaltanCorrer').textContent = data.cantidadCarrerasProximas || 0;
+
+            renderCarrerasFinalizadas(data.carrerasFinalizadas || []);
+            renderProximasCarreras(data.proximasCarreras || []);
+            clearError();
+        });
+
+        view.handler('error', (data) => {
+            showError(data);
+        });
+
+        // Funciones para renderizar carreras
+        function renderCarrerasFinalizadas(carreras) {
+            const container = document.getElementById('carrerasFinalizadasContainer');
+            
+            if (!carreras || carreras.length === 0) {
+                container.innerHTML = '<p>No hay carreras finalizadas</p>';
+                return;
+            }
+
+            container.innerHTML = carreras.map(carrera => `
+                <div>
+                    <h3>${carrera.nombre} (Carrera #${carrera.numero})</h3>
+                    <p>Estado: ${carrera.estado}</p>
+                    <p>Caballos: ${carrera.cantidadCaballos}</p>
+                    <p>Ganador: ${carrera.nombreGanador || 'N/A'}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderProximasCarreras(carreras) {
+            const container = document.getElementById('proximasCarrerasContainer');
+            
+            if (!carreras || carreras.length === 0) {
+                container.innerHTML = '<p>No hay próximas carreras</p>';
+                return;
+            }
+
+            container.innerHTML = carreras.map(carrera => `
+                <div>
+                    <h3>${carrera.nombre} (Carrera #${carrera.numero})</h3>
+                    <p>Estado: ${carrera.estado}</p>
+                    <p>Caballos: ${carrera.cantidadCaballos}</p>
+                </div>
+            `).join('');
+        }
+
+        // Funciones para manejar errores
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = 'Error: ' + message;
+        }
+
+        function clearError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = '';
+        }
+
+        // Event listeners para los botones
+        document.getElementById('btnAnterior').addEventListener('click', () => {
+            dispatcher.submit('/admin/jornada/anterior', {});
+        });
+
+        document.getElementById('btnSiguiente').addEventListener('click', () => {
+            dispatcher.submit('/admin/jornada/siguiente', {});
+        });
+
+        // Iniciar la vista al cargar
+        window.addEventListener('load', () => {
+            dispatcher.startView(view);
+        });
+    </script>
+</body>
+</html>
