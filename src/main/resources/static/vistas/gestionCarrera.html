@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Carrera - MalaPata</title>
+</head>
+<body>
+    <h1>Gestión de Carrera - MalaPata</h1>
+    
+    <div id="errorMessage"></div>
+
+    <div>
+        <h2>Información de la Carrera</h2>
+        <p>Número: <span id="carreraNumero">-</span></p>
+        <p>Nombre: <span id="carreraNombre">-</span></p>
+        <p>Estado: <span id="carreraEstado">-</span></p>
+        <p>Cantidad de Caballos: <span id="cantidadCaballos">-</span></p>
+        <p>Ganador: <span id="nombreGanador">-</span></p>
+    </div>
+
+    <div>
+        <h2>Caballos Participantes</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Nombre Caballo</th>
+                    <th>Dividendo</th>
+                </tr>
+            </thead>
+            <tbody id="participacionesContainer">
+                <tr>
+                    <td colspan="3">Cargando participaciones...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import dispatcher from '/vistas/CommandDispatcher.js';
+
+        // Registrar la vista
+        const numeroCarrera = sessionStorage.getItem('numeroCarrera');
+
+        const view = dispatcher.registerView('GestionCarrera', {
+            urlInicio: '/gestionCarrera/inicializarVista',
+            dataInicio: { numeroCarrera: numeroCarrera }
+            
+        });
+        console.log('numeroCarrera:', numeroCarrera);
+
+        // Registrar handler para el comando carrera
+        view.handler('carrera', (data) => {
+            document.getElementById('carreraNumero').textContent = data.numero || '-';
+            document.getElementById('carreraNombre').textContent = data.nombre || '-';
+            document.getElementById('carreraEstado').textContent = data.estado || '-';
+            document.getElementById('cantidadCaballos').textContent = data.cantidadCaballos || '-';
+            document.getElementById('nombreGanador').textContent = data.nombreGanador || 'Aún no hay ganador';
+
+            renderParticipaciones(data.participaciones || []);
+            clearError();
+        });
+
+        // Registrar handler para el comando error
+        view.handler('error', (data) => {
+            showError(data);
+        });
+
+        view.handler('redirigir', (url) => {
+                window.location.href = url; 
+        });
+
+        // Función para renderizar la tabla de participaciones
+        function renderParticipaciones(participaciones) {
+            const container = document.getElementById('participacionesContainer');
+            
+            if (!participaciones || participaciones.length === 0) {
+                container.innerHTML = '<tr><td colspan="3">No hay participaciones registradas</td></tr>';
+                return;
+            }
+
+            container.innerHTML = participaciones.map(participacion => `
+                <tr>
+                    <td>${participacion.numero || '-'}</td>
+                    <td>${participacion.nombreCaballo || '-'}</td>
+                    <td>${participacion.dividendo || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Funciones para manejar errores
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = 'Error: ' + message;
+        }
+
+        function clearError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = '';
+        }
+
+        // Iniciar la vista al cargar
+        window.addEventListener('load', () => {
+            dispatcher.startView(view);
+        });
+    </script>
+</body>
+</html>

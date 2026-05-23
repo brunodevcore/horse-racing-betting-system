@@ -37,8 +37,7 @@
     </div>
 
     <script type="module">
-        // Crear instancia de CommandDispatcher
-        import dispatcher from './CommandDispatcher.js';
+        import dispatcher from '/vistas/CommandDispatcher.js';
 
         // Registrar la vista
         const view = dispatcher.registerView('TableroAdmin', {
@@ -97,6 +96,7 @@
                     <h3>${carrera.nombre} (Carrera #${carrera.numero})</h3>
                     <p>Estado: ${carrera.estado}</p>
                     <p>Caballos: ${carrera.cantidadCaballos}</p>
+                    <button onclick="gestionar(${carrera.numero})">Gestionar</button>
                 </div>
             `).join('');
         }
@@ -120,6 +120,12 @@
         document.getElementById('btnSiguiente').addEventListener('click', () => {
             dispatcher.submit('/admin/jornada/siguiente', {});
         });
+
+        window.gestionar = function(numeroCarrera) {
+            sessionStorage.setItem('numeroCarrera', numeroCarrera);
+            window.location.href = '/vistas/gestionCarrera.html';
+        }
+
 
         // Iniciar la vista al cargar
         window.addEventListener('load', () => {

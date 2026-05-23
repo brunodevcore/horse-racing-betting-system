@@ -167,4 +167,17 @@ public class ServicioHipodromo {
         }
         return siguiente;
     }
+
+    public Carrera getCarrera(LocalDate fechaJornada, int numeroCarrera){
+        for(Jornada j : hipodromo.getJornadas()){
+            if(j.getFecha().equals(fechaJornada)){
+                for(Carrera c : j.getCarreras()){
+                    if(c.getNumero() == numeroCarrera){
+                        return c;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

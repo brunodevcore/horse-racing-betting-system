@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
-import malapata.dominio.Login;
+import malapata.dominio.Administrador;
 import malapata.dominio.Jornada;    
 import malapata.dtos.JornadaDTO;
 import malapata.servicio.FachadaServicios;
@@ -20,8 +20,8 @@ public class AdminPresentador {
     @PostMapping("/inicializarVista")
     public Commands inicializarVista(HttpSession session) {
 
-        Login login = (Login) session.getAttribute("loginUsuario");
-        if (login == null) {
+        Administrador admin = (Administrador) session.getAttribute("usuarioAdministrador");
+        if (admin == null) {
             return Commands.create(new Command("redirigir", "loginAdmin.html"));
         }
         Jornada jornada = FachadaServicios.getInstancia().getJornadaActual();    
@@ -30,15 +30,15 @@ public class AdminPresentador {
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
         return Commands.create(
-            new Command("nombreAdmin", login.getUsuario().getNombreCompleto()),
+            new Command("nombreAdmin", admin.getNombreCompleto()),
             new Command("jornada", new JornadaDTO(jornada))
         );      
     }
 
     @PostMapping("/jornada/anterior")
     public Commands jornadaAnterior(HttpSession session) {
-        Login login = (Login) session.getAttribute("loginUsuario");
-        if (login == null) {
+        Administrador admin = (Administrador) session.getAttribute("usuarioAdministrador");
+        if (admin == null) {
             return Commands.create(new Command("redirigir", "loginAdmin.html"));
         }
         LocalDate fechaActual = (LocalDate) session.getAttribute("fechaJornada");
@@ -54,8 +54,8 @@ public class AdminPresentador {
 
     @PostMapping("/jornada/siguiente")
     public Commands jornadaSiguiente(HttpSession session) {
-        Login login = (Login) session.getAttribute("loginUsuario");
-        if (login == null) {
+        Administrador admin = (Administrador) session.getAttribute("usuarioAdministrador");
+        if (admin == null) {
             return Commands.create(new Command("redirigir", "loginAdmin.html"));
         }
         LocalDate fechaActual = (LocalDate) session.getAttribute("fechaJornada");

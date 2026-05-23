@@ -14,6 +14,7 @@ public class CarreraDTO {
     private String estado;
     private int cantidadCaballos;
     private String nombreGanador;
+    private List<ParticipacionDTO> participaciones;
 
     public CarreraDTO(){
 
@@ -24,7 +25,8 @@ public class CarreraDTO {
         this.nombre = carrera.getNombre();
         this.estado = carrera.getEstado();
         this.cantidadCaballos = carrera.getParticipaciones().size();
-        this.nombreGanador = carrera.getGanador() != null ? carrera.getGanador().getNombre() : null;    
+        this.nombreGanador = carrera.getGanador() != null ? carrera.getGanador().getNombre() : null;  
+        this.participaciones = ParticipacionDTO.fromLista(carrera.getParticipaciones());  
     }
 
     public static List<CarreraDTO> fromLista(List<Carrera> carreras) {

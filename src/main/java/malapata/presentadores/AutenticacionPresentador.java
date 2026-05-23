@@ -1,8 +1,8 @@
 package malapata.presentadores;
 
 import jakarta.servlet.http.HttpSession;
+import malapata.dominio.Administrador;
 import malapata.dominio.Credencial;
-import malapata.dominio.Jugador;
 import malapata.dominio.Login;
 import malapata.dtos.CredencialDTO;
 import malapata.excepciones.AutenticacionException;
@@ -30,8 +30,8 @@ public class AutenticacionPresentador {
     public Commands loginAdmin(HttpSession session, CredencialDTO credencialDTO) {
        try{
             Credencial credencial = credencialDTO.toCredencial();
-            Login login = FachadaServicios.getInstancia().autenticarAdministrador(credencial);
-            session.setAttribute("loginUsuario", login);
+            Administrador administrador = FachadaServicios.getInstancia().autenticarAdministrador(credencial);
+            session.setAttribute("usuarioAdministrador", administrador);
             return Commands.create(new Command("redirigir", "tableroAdmin.html"));
        } catch (AutenticacionException e) {
             return Commands.create(new Command("error", e.getMessage()));
@@ -40,14 +40,25 @@ public class AutenticacionPresentador {
     
     @PostMapping("/logout")
     public Commands logout(HttpSession session) {
-        Login login = (Login) session.getAttribute("loginUsuario");
-        FachadaServicios.getInstancia().logout(login);
-        session.removeAttribute("loginUsuario");
-        session.invalidate();
-        if(login.getUsuario() instanceof Jugador){
-            return Commands.create(new Command("redirigir", "loginJugador.html"));
-        }
-        return Commands.create(new Command("redirigir", "loginAdmin.html"));
+        Login loginJugador = (Login) session.getAttribute("loginUsuario");
+        Administrador admin = (Administrador) session.getAttribute("usuarioAdministrador");
+
+          if(loginJugador != null){
+               FachadaServicios.getInstancia().logout(loginJugador);
+               session.invalidate();
+               return Commands.create(new Command("redirigir", "loginJugador.html"));    
+          } 
+          
+          if(admin != null){
+               FachadaServicios.getInstancia().logoutAdministrador(admin);
+               session.invalidate();
+               return Commands.create(new Command("redirigir", "loginAdmin.html"));    
+          }
+
+          session.invalidate();
+          return Commands.create(new Command("redirigir", "loginAdmin.html"));
+        
+        
     }
     
     

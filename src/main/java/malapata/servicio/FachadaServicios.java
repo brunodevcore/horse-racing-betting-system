@@ -6,6 +6,8 @@ import malapata.dominio.Credencial;
 import malapata.dominio.Login;
 import malapata.dominio.Jornada;
 import malapata.excepciones.AutenticacionException;
+import malapata.dominio.Administrador;
+import malapata.dominio.Carrera;
 
 public class FachadaServicios {
     
@@ -30,12 +32,16 @@ public class FachadaServicios {
         return servicioAutenticacion.auntenticarJugador(credencial);
     }
 
-    public Login autenticarAdministrador(Credencial credencial) throws AutenticacionException {
+    public Administrador autenticarAdministrador(Credencial credencial) throws AutenticacionException {
         return servicioAutenticacion.autenticarAdministrador(credencial);
     }
 
     public void logout(Login login){
         servicioAutenticacion.logout(login);
+    }
+
+    public void logoutAdministrador(Administrador administrador){
+        servicioAutenticacion.logoutAdministrador(administrador);
     }
 
     public Jornada getJornadaActual(){
@@ -49,5 +55,10 @@ public class FachadaServicios {
     public Jornada getJornadaSiguiente(LocalDate fecha){
         return servicioHipodromo.getJornadaSiguiente(fecha);
     }
+    
+    public Carrera getCarrera(LocalDate fechaJornada, int numeroCarrera){
+        return servicioHipodromo.getCarrera(fechaJornada, numeroCarrera);
+    }
+
 
 }

@@ -29,17 +29,14 @@ public class ServicioAutenticacion {
         throw new AutenticacionException("Acceso denegado");
     }
 
-    public Login autenticarAdministrador(Credencial credencial) throws AutenticacionException{
+    public Administrador autenticarAdministrador(Credencial credencial) throws AutenticacionException{
         for(Administrador administrador : hipodromo.getAdministradores()){
             if(administrador.esValida(credencial)){
-                for(Login login : logins){
-                    if(login.getUsuario().equals(administrador)){
-                        throw new AutenticacionException("El administrador ya esta logueado ");
-                    }
+                if(administrador.isEstaLogueado()){
+                    throw new AutenticacionException("El administrador ya tiene una sesión activa");
                 }
-                Login login = new Login(new Date(), administrador);
-                logins.add(login);
-                return login; 
+                administrador.setEstaLogueado(true);
+                return administrador;
             }
         }
         throw new AutenticacionException("Acceso denegado");
@@ -47,6 +44,10 @@ public class ServicioAutenticacion {
 
     public void logout(Login login){
         logins.remove(login);
+    }
+
+    public void logoutAdministrador(Administrador administrador){
+       administrador.setEstaLogueado(false);
     }
 
 }
