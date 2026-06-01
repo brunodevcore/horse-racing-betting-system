@@ -11,6 +11,6 @@ public abstract class ModalidadDeApuesta {
         this.nombre = nombre;
     }
 
-    public abstract double calcularCosto(double monto);
-    public abstract double calcularPago(double monto, double dividento, double totalApostadoAlCaballo);
+    public abstract double calcularCosto(Apuesta apuesta);
+    public abstract double calcularPago(Apuesta apuesta);
 }

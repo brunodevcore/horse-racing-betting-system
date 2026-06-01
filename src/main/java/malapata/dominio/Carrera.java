@@ -19,7 +19,7 @@ public class Carrera {
     private List<Participacion> participaciones;
 
     @Getter
-    private Caballo ganador;
+    private Participacion ganador;
 
     public Carrera(int numero, String nombre){
         this.numero = numero;
@@ -41,7 +41,7 @@ public class Carrera {
         this.estado = "Cerrada";
     }
 
-    public void finalizar(Caballo ganador){
+    public void finalizar(Participacion ganador){
         this.estado = "Finalizada";
         this.ganador = ganador;
     }

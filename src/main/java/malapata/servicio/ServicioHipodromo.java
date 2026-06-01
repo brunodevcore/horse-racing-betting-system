@@ -133,7 +133,7 @@ public class ServicioHipodromo {
         Jornada jornadaActual = null;
 
         for(Jornada j : hipodromo.getJornadas()){
-            if(j.getFecha().equals(hoy)){
+            if(j.getFecha().isAfter(hoy)){
                 if(jornadaActual == null || j.getFecha().isAfter(jornadaActual.getFecha())){
                     jornadaActual = j;
                 }

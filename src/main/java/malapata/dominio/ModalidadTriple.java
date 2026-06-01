@@ -7,15 +7,15 @@ public class ModalidadTriple extends ModalidadDeApuesta {
     }
 
     @Override
-    public double calcularCosto(double monto){
-        return monto * 1.5;
+    public double calcularCosto(Apuesta apuesta){
+        return apuesta.getMonto() * 1.5;
     }
 
     @Override
-    public double calcularPago(double monto, double dividendo, double totalApostadoAlCaballo){
-        if(totalApostadoAlCaballo >= 100000) {
-            return monto * dividendo * 3;
+    public double calcularPago(Apuesta apuesta){
+        if(apuesta.getParticipacion().calcularTotalApostado() >= 100000) {
+            return apuesta.getMonto() * apuesta.getParticipacion().getDividendo() * 3;
         }
-        return monto * dividendo * 2; 
+        return apuesta.getMonto() * apuesta.getParticipacion().getDividendo() * 2; 
     }
 }

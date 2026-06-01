@@ -25,7 +25,7 @@ public class CarreraDTO {
         this.nombre = carrera.getNombre();
         this.estado = carrera.getEstado();
         this.cantidadCaballos = carrera.getParticipaciones().size();
-        this.nombreGanador = carrera.getGanador() != null ? carrera.getGanador().getNombre() : null;  
+        this.nombreGanador = carrera.getGanador() != null ? carrera.getGanador().getCaballo().getNombre() : null;  
         this.participaciones = ParticipacionDTO.fromLista(carrera.getParticipaciones());  
     }
 
