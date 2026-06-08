@@ -31,7 +31,7 @@ public class AdminPresentador {
         session.setAttribute("fechaJornada", jornada.getFecha());
         return Commands.create(
             new Command("nombreAdmin", admin.getNombreCompleto()),
-            new Command("jornada", new JornadaDTO(jornada))
+            new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision()))
         );      
     }
 
@@ -47,8 +47,8 @@ public class AdminPresentador {
             return Commands.create(new Command("error", "No hay jornadas anteriores a la seleccionada"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
-        return Commands.create(new Command("jornada", new JornadaDTO(jornada))
-        );
+        return Commands.create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
+        
 
     }
 
@@ -64,8 +64,8 @@ public class AdminPresentador {
             return Commands.create(new Command("error", "No hay jornadas siguientes a la seleccionada"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
-        return Commands.create(new Command("jornada", new JornadaDTO(jornada))
-        );
+        return Commands.create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
+      
 
     }
     

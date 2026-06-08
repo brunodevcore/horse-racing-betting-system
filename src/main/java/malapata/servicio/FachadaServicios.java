@@ -60,5 +60,8 @@ public class FachadaServicios {
         return servicioHipodromo.getCarrera(fechaJornada, numeroCarrera);
     }
 
+    public double getComision(){
+        return servicioHipodromo.getHipodromo().getComision();
+    }
 
 }

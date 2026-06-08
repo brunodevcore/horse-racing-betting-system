@@ -12,10 +12,10 @@ public class ModalidadSuper extends ModalidadDeApuesta {
     }
 
     @Override 
-    public double calcularPago(Apuesta apuesta, Participacion participacion){
-        if(participacion.getDividendo() >= 2){
-            return apuesta.getMonto() * participacion.getDividendo() * 3;
+    public double calcularPago(Apuesta apuesta){
+       if(apuesta.getParticipacion().getDividendo() >=2){
+            return apuesta.getMonto() * apuesta.getParticipacion().getDividendo() * 3;
         }
-        return apuesta.getMonto() * participacion.getDividendo() * 4;
+        return apuesta.getMonto() * apuesta.getParticipacion().getDividendo() * 4;
     }
 }

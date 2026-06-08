@@ -24,6 +24,12 @@
         <p>Total de Carreras: <span id="cantidadCarreras">0</span></p>
         <p>Carreras Finalizadas: <span id="cantidadFinalizadas">0</span></p>
         <p>Carreras por Correr: <span id="cantidadFaltanCorrer">0</span></p>
+    
+        <p>Total Apostado: $<span id="totalApostado">0</span></p>
+        <p>Total Pagado: $<span id="totalPagado">0</span></p>
+        <p>Total Comisiones: $<span id="totalComisiones">0</span></p>
+        <p>Balance: $<span id="balance">0</span></p>
+    
     </div>
 
     <div>
@@ -54,6 +60,11 @@
             document.getElementById('cantidadCarreras').textContent = data.cantidadCarreras || 0;
             document.getElementById('cantidadFinalizadas').textContent = data.cantidadCarrerasFinalizadas || 0;
             document.getElementById('cantidadFaltanCorrer').textContent = data.cantidadCarrerasProximas || 0;
+
+            document.getElementById('totalApostado').textContent = data.totalApostado || 0;
+            document.getElementById('totalPagado').textContent = data.totalPagado || 0;
+            document.getElementById('totalComisiones').textContent = data.totalComisiones || 0;
+            document.getElementById('balance').textContent = data.balance || 0; 
 
             renderCarrerasFinalizadas(data.carrerasFinalizadas || []);
             renderProximasCarreras(data.proximasCarreras || []);

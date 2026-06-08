@@ -76,7 +76,7 @@ public class ServicioHipodromo {
             }
         }
 
-        carreraPasada1.cerrar();
+        carreraPasada1.setEstado(new EstadoCerrada());
         jornadaPasada.agregarCarrera(carreraPasada1);
 
         // carrera 2
@@ -92,7 +92,7 @@ public class ServicioHipodromo {
             }
         }
 
-        carreraPasada2.cerrar();
+        carreraPasada2.setEstado(new EstadoCerrada());
         jornadaPasada.agregarCarrera(carreraPasada2);
 
         hipodromo.getJornadas().add(jornadaPasada);
@@ -133,7 +133,7 @@ public class ServicioHipodromo {
         Jornada jornadaActual = null;
 
         for(Jornada j : hipodromo.getJornadas()){
-            if(j.getFecha().isAfter(hoy)){
+            if(!j.getFecha().isAfter(hoy)){
                 if(jornadaActual == null || j.getFecha().isAfter(jornadaActual.getFecha())){
                     jornadaActual = j;
                 }

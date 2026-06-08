@@ -39,4 +39,12 @@ public class Participacion {
         return total;
     }
 
+    public double calcularTotalPagado(){
+        double total = 0;
+        for (Apuesta apuesta : apuestas) {
+            total += apuesta.getMontoCobrado();
+        }
+        return total;
+    }
+
 }

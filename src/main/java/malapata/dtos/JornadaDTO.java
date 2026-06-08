@@ -18,11 +18,16 @@ public class JornadaDTO {
     private int cantidadCarrerasFinalizadas;
     private int cantidadCarrerasProximas;
 
+    private double totalApostado;
+    private double totalPagado;
+    private double balance;
+    private double totalComisiones;
+
     public JornadaDTO() {
 
     }
 
-    public JornadaDTO(Jornada jornada) {
+    public JornadaDTO(Jornada jornada, double comision) {
         this.fecha = jornada.getFecha();
         this.cantidadCarreras = jornada.getCarreras().size();
         this.carrerasFinalizadas = CarreraDTO.fromLista(
@@ -38,5 +43,10 @@ public class JornadaDTO {
         );
         this.cantidadCarrerasFinalizadas = carrerasFinalizadas.size();
         this.cantidadCarrerasProximas = proximasCarreras.size();
+
+        this.totalApostado = jornada.calcularTotalApostado();
+        this.totalPagado = jornada.calcularTotalPagado();
+        this.balance = totalApostado - totalPagado;
+        this.totalComisiones = balance * comision;
     }
 }
