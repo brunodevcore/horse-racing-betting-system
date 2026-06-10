@@ -1,6 +1,8 @@
 package malapata.servicio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import malapata.dominio.*;
@@ -180,4 +182,35 @@ public class ServicioHipodromo {
         }
         return null;
     }
+
+    public List<Apuesta> getApuestasJugador(Jugador jugador){
+        List<Apuesta> apuestasJugador = new ArrayList<>();
+
+        for(Jornada j : hipodromo.getJornadas()){
+            for(Carrera c : j.getCarreras()){
+                for(Participacion p : c.getParticipaciones()){
+                    for(Apuesta a : p.getApuestas()){
+                        if(a.getJugador().equals(jugador)){
+                            apuestasJugador.add(a);
+                        }
+                    }
+                }
+            }
+        }
+        return apuestasJugador;
+    }
+
+    public List<Carrera> getCarrerasDisponibles(){
+        List<Carrera> carrerasDisponibles = new ArrayList<>();
+
+        for(Jornada j : hipodromo.getJornadas()){
+            for (Carrera c : j.getCarreras()) {
+                if (c.getEstado().equals("Abierta") || c.getEstado().equals("Estable")) {
+                    carrerasDisponibles.add(c);
+                }
+            }
+        }
+        return carrerasDisponibles;
+    }
+
 }

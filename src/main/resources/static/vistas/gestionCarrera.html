@@ -27,11 +27,13 @@
                     <th>Número</th>
                     <th>Nombre Caballo</th>
                     <th>Dividendo</th>
+                    <th>Total Apostado</th>
+                    <th>Cantidad de Apuestas</th>
                 </tr>
             </thead>
             <tbody id="participacionesContainer">
                 <tr>
-                    <td colspan="3">Cargando participaciones...</td>
+                    <td colspan="5">Cargando participaciones...</td>
                 </tr>
             </tbody>
         </table>
@@ -85,6 +87,8 @@
                     <td>${participacion.numero || '-'}</td>
                     <td>${participacion.nombreCaballo || '-'}</td>
                     <td>${participacion.dividendo || '-'}</td>
+                    <td>${participacion.totalApostado || 0}</td> 
+                    <td>${participacion.cantidadApuestas || 0}</td> 
                 </tr>
             `).join('');
         }

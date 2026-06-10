@@ -1,13 +1,17 @@
 package malapata.servicio;
 
 import java.time.LocalDate;
+import malapata.dominio.Apuesta;
+import java.util.List;
 
 import malapata.dominio.Credencial;
 import malapata.dominio.Login;
+import malapata.dominio.ModalidadDeApuesta;
 import malapata.dominio.Jornada;
 import malapata.excepciones.AutenticacionException;
 import malapata.dominio.Administrador;
 import malapata.dominio.Carrera;
+import malapata.dominio.Jugador;
 
 public class FachadaServicios {
     
@@ -64,4 +68,15 @@ public class FachadaServicios {
         return servicioHipodromo.getHipodromo().getComision();
     }
 
+    public List<Apuesta> getApuestasJugador(Jugador jugador){
+        return servicioHipodromo.getApuestasJugador(jugador);
+    }
+
+    public List<Carrera> getCarrerasDisponibles( ){
+        return servicioHipodromo.getCarrerasDisponibles();
+    }
+
+    public List<ModalidadDeApuesta> getModalidades() {
+        return servicioHipodromo.getHipodromo().getModalidades();
+    }
 }

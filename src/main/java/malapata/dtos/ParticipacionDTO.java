@@ -13,6 +13,8 @@ public class ParticipacionDTO {
     private int numero;
     private String nombreCaballo;
     private double dividendo;
+    private double totalApostado;
+    private int cantidadApuestas;
 
     public ParticipacionDTO() {
 
@@ -22,6 +24,8 @@ public class ParticipacionDTO {
         this.numero = participacion.getNumero();
         this.nombreCaballo = participacion.getCaballo().getNombre();
         this.dividendo = participacion.getDividendo();
+        this.totalApostado = participacion.calcularTotalApostado();
+        this.cantidadApuestas = participacion.getApuestas().size();
     }
 
     public static List<ParticipacionDTO> fromLista(List<Participacion> participaciones) {
@@ -29,5 +33,6 @@ public class ParticipacionDTO {
             .map(ParticipacionDTO::new)
             .toList();
     }
+
 
 }

@@ -20,11 +20,15 @@ public class Participacion {
     @Getter
     private List<Apuesta> apuestas;
 
+    @Getter
+    private Carrera carrera;
+
     public Participacion(int numero, Caballo caballo){
         this.numero = numero;
         this.caballo = caballo;
         this.dividendo = 0;
         this.apuestas = new ArrayList<>();
+        this.carrera = null;
     }
 
     public void agregarApuestas(Apuesta apuesta){
@@ -45,6 +49,10 @@ public class Participacion {
             total += apuesta.getMontoCobrado();
         }
         return total;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
     }
 
 }

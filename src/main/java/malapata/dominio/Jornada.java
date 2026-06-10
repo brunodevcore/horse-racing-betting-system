@@ -19,6 +19,7 @@ public class Jornada {
     }
     
     public void agregarCarrera(Carrera carrera){
+        carrera.setJornada(this);
         carreras.add(carrera);
     }
     
@@ -37,4 +38,5 @@ public class Jornada {
         }
         return total;
     }   
+
 }

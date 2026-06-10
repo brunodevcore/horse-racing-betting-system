@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tablero Jugador - Malapata</title>
+</head>
+<body>
+  <main>
+    <h1>Tablero del Jugador</h1>
+
+    <section id="jugadorSection">
+      <h2>Jugador</h2>
+      <div id="jugador">
+        <p><strong>Nombre:</strong> <span id="jugadorNombre">-</span></p>
+        <p><strong>Saldo:</strong> <span id="jugadorSaldo">-</span></p>
+        <p><strong>Total Apostado:</strong> <span id="jugadorTotalApostado">-</span></p>
+        <p><strong>Total Ganado:</strong> <span id="jugadorTotalGanado">-</span></p>
+      </div>
+    </section>
+
+    <section id="carrerasSection">
+      <h2>Carreras Disponibles</h2>
+      <div id="carrerasDisponibles">Cargando...</div>
+    </section>
+
+    <section id="modalidadesSection">
+      <h2>Modalidades</h2>
+      <ul id="modalidadesList"></ul>
+    </section>
+
+    <section id="misApuestasSection">
+      <h2>Mis Apuestas</h2>
+      <div id="misApuestasContainer">
+        <table id="misApuestasTable" border="1" cellspacing="0" cellpadding="4">
+          <thead>
+            <tr>
+              <th>Fecha Carrera</th>
+              <th>N° Carrera</th>
+              <th>Nombre Carrera</th>
+              <th>N° Caballo</th>
+              <th>Nombre Caballo</th>
+              <th>Monto</th>
+              <th>Tipo Apuesta</th>
+              <th>Monto Cobrado</th>
+              <th>Dividendo</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="misApuestasBody">
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div id="error" role="alert" aria-live="assertive" style="color:darkred; display:none;"></div>
+  </main>
+
+  <script type="module">
+    import dispatcher from '/vistas/CommandDispatcher.js';
+
+    const jugadorNombre = document.getElementById('jugadorNombre');
+    const jugadorSaldo = document.getElementById('jugadorSaldo');
+    const jugadorTotalApostado = document.getElementById('jugadorTotalApostado');
+    const jugadorTotalGanado = document.getElementById('jugadorTotalGanado');
+
+    const carrerasDisponiblesEl = document.getElementById('carrerasDisponibles');
+    const modalidadesList = document.getElementById('modalidadesList');
+    const misApuestasBody = document.getElementById('misApuestasBody');
+    const errorEl = document.getElementById('error');
+
+    function showError(msg) {
+      if (!msg) {
+        errorEl.style.display = 'none';
+        errorEl.textContent = '';
+        return;
+      }
+      errorEl.textContent = typeof msg === 'string' ? msg : JSON.stringify(msg);
+      errorEl.style.display = 'block';
+    }
+
+    function renderJugador(jugador) {
+      if (!jugador) return;
+      jugadorNombre.textContent = jugador.nombreCompleto ?? '-';
+      jugadorSaldo.textContent = jugador.saldo ?? '-';
+      jugadorTotalApostado.textContent = jugador.totalApostado ?? '-';
+      jugadorTotalGanado.textContent = jugador.totalGanado ?? '-';
+    }
+
+    function renderCarreras(carreras) {
+      if (!Array.isArray(carreras)) {
+        carrerasDisponiblesEl.textContent = 'No hay carreras disponibles';
+        return;
+      }
+      carrerasDisponiblesEl.innerHTML = '';
+
+      carreras.forEach(carrera => {
+        const cont = document.createElement('div');
+        const heading = document.createElement('h3');
+        heading.textContent = `Carrera ${carrera.numero} - ${carrera.nombre}`;
+        cont.appendChild(heading);
+
+        const ul = document.createElement('ul');
+        if (Array.isArray(carrera.participaciones) && carrera.participaciones.length) {
+          carrera.participaciones.forEach(p => {
+            const li = document.createElement('li');
+            li.textContent = `#${p.numero} ${p.nombreCaballo} (Dividendo: ${p.dividendo})`;
+            ul.appendChild(li);
+          });
+        } else {
+          const li = document.createElement('li');
+          li.textContent = 'No hay participaciones disponibles';
+          ul.appendChild(li);
+        }
+
+        cont.appendChild(ul);
+        carrerasDisponiblesEl.appendChild(cont);
+      });
+    }
+
+    function renderModalidades(modalidades) {
+      modalidadesList.innerHTML = '';
+      if (!Array.isArray(modalidades) || modalidades.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'No hay modalidades';
+        modalidadesList.appendChild(li);
+        return;
+      }
+      modalidades.forEach(m => {
+        const li = document.createElement('li');
+        li.textContent = m.nombre ?? JSON.stringify(m);
+        modalidadesList.appendChild(li);
+      });
+    }
+
+    function renderMisApuestas(misApuestas) {
+      misApuestasBody.innerHTML = '';
+      if (!Array.isArray(misApuestas) || misApuestas.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 10;
+        td.textContent = 'No tiene apuestas registradas';
+        tr.appendChild(td);
+        misApuestasBody.appendChild(tr);
+        return;
+      }
+
+      misApuestas.forEach(a => {
+        const tr = document.createElement('tr');
+        const add = (text) => { const td = document.createElement('td'); td.textContent = text ?? '-'; tr.appendChild(td); };
+
+        add(a.fechaCarrera);
+        add(a.numeroCarrera);
+        add(a.nombreCarrera);
+        add(a.numeroCaballo);
+        add(a.nombreCaballo);
+        add(a.monto);
+        add(a.tipoApuesta);
+        add(a.montoCobrado);
+        add(a.dividendo);
+        add(a.estado);
+
+        misApuestasBody.appendChild(tr);
+      });
+    }
+
+    // Registrar vista y handlers usando el patrón CommandDispatcher
+    const view = dispatcher.registerView('TableroJugador', {
+      urlInicio: '/jugador/inicializarVista',
+      onError: (status, text) => showError(text),
+      onException: (msg) => showError(msg)
+    });
+
+    view.handler('jugador', renderJugador);
+    view.handler('carrerasDisponibles', renderCarreras);
+    view.handler('modalidades', renderModalidades);
+    view.handler('misApuestas', renderMisApuestas);
+    view.handler('error', (param) => showError(param));
+
+    // Iniciar la vista
+    dispatcher.startView(view);
+  </script>
+</body>
+</html>

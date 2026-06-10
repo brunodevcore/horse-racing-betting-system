@@ -22,6 +22,9 @@ public class Carrera {
     @Setter
     private Participacion ganador;
 
+    @Getter
+    private Jornada jornada;
+
     public Carrera(int numero, String nombre){
         this.numero = numero;
         this.nombre = nombre;
@@ -39,7 +42,10 @@ public class Carrera {
     }
 
     public void agregarParticipacion(Caballo caballo, int numero){
-        participaciones.add(new Participacion(numero, caballo));
+        Participacion participacion = new Participacion(numero, caballo);
+        participacion.setCarrera(this);
+        participaciones.add(participacion);
+
     }
 
     public void abrir(){
@@ -72,4 +78,9 @@ public class Carrera {
         }
         return total;
     }
+
+    public void setJornada(Jornada jornada) {
+        this.jornada = jornada;
+    }
+
 }

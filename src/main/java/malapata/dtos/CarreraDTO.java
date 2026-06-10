@@ -15,6 +15,7 @@ public class CarreraDTO {
     private int cantidadCaballos;
     private String nombreGanador;
     private List<ParticipacionDTO> participaciones;
+    private double totalApostado;
 
     public CarreraDTO(){
 
@@ -27,6 +28,7 @@ public class CarreraDTO {
         this.cantidadCaballos = carrera.getParticipaciones().size();
         this.nombreGanador = carrera.getGanador() != null ? carrera.getGanador().getCaballo().getNombre() : null;  
         this.participaciones = ParticipacionDTO.fromLista(carrera.getParticipaciones());  
+        this.totalApostado = carrera.calcularTotalApostado();
     }
 
     public static List<CarreraDTO> fromLista(List<Carrera> carreras) {
