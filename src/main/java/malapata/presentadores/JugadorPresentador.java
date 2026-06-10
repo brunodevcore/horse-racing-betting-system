@@ -30,8 +30,8 @@ public class JugadorPresentador {
 
         return Commands.create(
             new Command("jugador", new JugadorDTO(jugador, apuestas)),
-            new Command("carrerasDisponibles", CarreraDTO.fromLista(FachadaServicios.getInstancia().getCarrerasDisponibles())),
             new Command("modalidades", FachadaServicios.getInstancia().getModalidades()),
+            new Command("carrerasDisponibles", CarreraDTO.fromLista(FachadaServicios.getInstancia().getCarrerasDisponibles())),
             new Command("misApuestas", ApuestaDTO.fromLista(apuestas))
         );
     }

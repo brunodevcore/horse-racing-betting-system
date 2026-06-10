@@ -69,6 +69,8 @@
     const misApuestasBody = document.getElementById('misApuestasBody');
     const errorEl = document.getElementById('error');
 
+    let modalidadesDisponibles = [];
+
     function showError(msg) {
       if (!msg) {
         errorEl.style.display = 'none';
@@ -100,11 +102,73 @@
         heading.textContent = `Carrera ${carrera.numero} - ${carrera.nombre}`;
         cont.appendChild(heading);
 
+        // Agregar select de modalidades y input de monto
+        const controlsDiv = document.createElement('div');
+        controlsDiv.style.marginBottom = '12px';
+
+        const modalidadLabel = document.createElement('label');
+        modalidadLabel.textContent = 'Modalidad: ';
+        const modalidadSelect = document.createElement('select');
+        modalidadSelect.style.marginRight = '12px';
+        if (Array.isArray(modalidadesDisponibles) && modalidadesDisponibles.length > 0) {
+          modalidadesDisponibles.forEach(m => {
+            const option = document.createElement('option');
+            option.value = m.nombre || '';
+            option.textContent = m.nombre || '-';
+            modalidadSelect.appendChild(option);
+          });
+        }
+
+        const montoLabel = document.createElement('label');
+        montoLabel.textContent = 'Monto: ';
+        montoLabel.style.marginLeft = '12px';
+        montoLabel.style.marginRight = '4px';
+        const montoInput = document.createElement('input');
+        montoInput.type = 'number';
+        montoInput.min = '0';
+        montoInput.step = '0.01';
+        montoInput.style.marginRight = '12px';
+        montoInput.style.width = '80px';
+
+        controlsDiv.appendChild(modalidadLabel);
+        controlsDiv.appendChild(modalidadSelect);
+        controlsDiv.appendChild(montoLabel);
+        controlsDiv.appendChild(montoInput);
+
+        cont.appendChild(controlsDiv);
+
         const ul = document.createElement('ul');
         if (Array.isArray(carrera.participaciones) && carrera.participaciones.length) {
           carrera.participaciones.forEach(p => {
             const li = document.createElement('li');
-            li.textContent = `#${p.numero} ${p.nombreCaballo} (Dividendo: ${p.dividendo})`;
+            const span = document.createElement('span');
+            span.textContent = `#${p.numero} ${p.nombreCaballo} (Dividendo: ${p.dividendo})`;
+            
+            const botonApostar = document.createElement('button');
+            botonApostar.type = 'button';
+            botonApostar.textContent = 'Apostar';
+            botonApostar.style.marginLeft = '12px';
+            botonApostar.addEventListener('click', () => {
+              const modalidad = modalidadSelect.value;
+              const monto = montoInput.value;
+              
+              if (!modalidad || !monto) {
+                showError('Por favor selecciona una modalidad e ingresa un monto');
+                return;
+              }
+              
+              // Guardar datos en sessionStorage
+              sessionStorage.setItem('numeroCarrera', carrera.numero);
+              sessionStorage.setItem('numeroParticipacion', p.numero);
+              sessionStorage.setItem('nombreModalidad', modalidad);
+              sessionStorage.setItem('monto', monto);
+              
+              // Redirigir a confirmarApuesta.html
+              window.location.href = '/vistas/confirmarApuesta.html';
+            });
+            
+            li.appendChild(span);
+            li.appendChild(botonApostar);
             ul.appendChild(li);
           });
         } else {
@@ -119,6 +183,7 @@
     }
 
     function renderModalidades(modalidades) {
+      modalidadesDisponibles = Array.isArray(modalidades) ? modalidades : [];
       modalidadesList.innerHTML = '';
       if (!Array.isArray(modalidades) || modalidades.length === 0) {
         const li = document.createElement('li');

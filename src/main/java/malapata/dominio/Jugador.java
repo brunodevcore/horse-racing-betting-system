@@ -13,4 +13,8 @@ public class Jugador extends Usuario{
         super(nombreUsuario, nombreCompleto, contrasena);
         this.saldo = saldo;
     }
+
+    public void descontarSaldo(double monto) {
+    this.saldo -= monto;
+}
 }

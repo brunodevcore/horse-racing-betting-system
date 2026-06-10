@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Apuesta</title>
+</head>
+<body>
+    <h1>Confirmar Apuesta</h1>
+
+    <div id="errorMessage"></div>
+
+    <div id="loading">
+        <p>Cargando datos de la apuesta...</p>
+    </div>
+
+    <div id="apuestaSection" style="display: none;">
+        <div>
+            <p>Número de Carrera: <span id="numeroCarrera">-</span></p>
+            <p>Nombre de Carrera: <span id="nombreCarrera">-</span></p>
+            <p>Número de Caballo: <span id="numeroCaballo">-</span></p>
+            <p>Nombre de Caballo: <span id="nombreCaballo">-</span></p>
+            <p>Tipo de Apuesta: <span id="tipoApuesta">-</span></p>
+            <p>Dividendo Actual: <span id="dividendoActual">-</span></p>
+            <p>Modalidad: <span id="modalidad">-</span></p>
+        </div>
+
+        <div>
+            <p>Monto a Apostar: <span id="montoApostar">$0.00</span></p>
+            <p>Monto si Gana: <span id="montoGana">$0.00</span></p>
+            <p>Monto a Pagar: <span id="montoPagar">$0.00</span></p>
+        </div>
+
+        <div>
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" placeholder="Ingrese su contraseña">
+        </div>
+
+        <div>
+            <button id="btnConfirmar">Confirmar Apuesta</button>
+            <button id="btnDescartar">Descartar Apuesta</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import dispatcher from '/vistas/CommandDispatcher.js';
+
+        let apuestaData = null;
+
+        // Registrar la vista
+        const view = dispatcher.registerView('confirmarApuesta', {
+        urlInicio: '/confirmarApuesta/inicializarVista',
+        dataInicio: {
+            numeroCarrera: sessionStorage.getItem('numeroCarrera') || '',
+            numeroParticipacion: sessionStorage.getItem('numeroParticipacion') || '',
+            nombreModalidad: sessionStorage.getItem('nombreModalidad') || '',
+            monto: sessionStorage.getItem('monto') || ''
+        }
+});
+
+        // Handlers de comandos
+        view.handler('apuesta', (data) => {
+            apuestaData = data;
+            
+            document.getElementById('numeroCarrera').textContent = data.numeroCarrera || '-';
+            document.getElementById('nombreCarrera').textContent = data.nombreCarrera || '-';
+            document.getElementById('numeroCaballo').textContent = data.numeroCaballo || '-';
+            document.getElementById('nombreCaballo').textContent = data.nombreCaballo || '-';
+            document.getElementById('tipoApuesta').textContent = data.tipoApuesta || '-';
+            document.getElementById('dividendoActual').textContent = data.dividendoActual || '-';
+            document.getElementById('modalidad').textContent = data.nombreModalidad || '-';
+            
+            document.getElementById('montoApostar').textContent = '$' + (data.monto || 0);
+            document.getElementById('montoGana').textContent = '$' + (data.montoSiGana || 0);
+            document.getElementById('montoPagar').textContent = '$' + (data.montoAPagar || 0);
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('apuestaSection').style.display = 'block';
+        });
+
+        view.handler('redirigir', (data) => {
+            window.location.href = '/vistas/' + data;
+        });
+
+        view.handler('error', (data) => {
+            document.getElementById('errorMessage').textContent = data;
+        });
+
+        // Eventos de botones
+        document.getElementById('btnConfirmar').addEventListener('click', () => {
+            const contraseña = document.getElementById('contraseña').value.trim();
+
+            if (!contraseña) {
+                document.getElementById('errorMessage').textContent = 'Por favor ingrese su contraseña';
+                return;
+            }
+
+            if (!apuestaData) {
+                document.getElementById('errorMessage').textContent = 'Datos de apuesta no disponibles';
+                return;
+            }
+
+            dispatcher.submit('/confirmarApuesta/confirmar', {
+                numeroCarrera: sessionStorage.getItem('numeroCarrera'),
+                numeroParticipacion: sessionStorage.getItem('numeroParticipacion'),
+                nombreModalidad: sessionStorage.getItem('nombreModalidad'),
+                monto: sessionStorage.getItem('monto'),
+                contrasena: contraseña
+            });
+        });
+
+        document.getElementById('btnDescartar').addEventListener('click', () => {
+            dispatcher.submit('/confirmarApuesta/descartar', {});
+        });
+
+        // Iniciar la vista cuando el documento esté listo
+        window.addEventListener('load', () => {
+            dispatcher.startView(view);
+        });
+    </script>
+</body>
+</html>
