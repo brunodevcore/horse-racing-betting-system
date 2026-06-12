@@ -1,4 +1,5 @@
 package malapata.dominio;
+
 import malapata.excepciones.CarreraException;
 
 public class EstadoAbierta implements EstadoCarrera {
@@ -25,7 +26,12 @@ public class EstadoAbierta implements EstadoCarrera {
 
     @Override
     public void realizarApuesta(Carrera carrera) {
-        // Permitir realizar apuestas mientras la carrera esté abierta.
+        for (Participacion p : carrera.getParticipaciones()) {
+            if (p.getDividendo() <= 1) {
+                return; 
+            }
+        }
+        carrera.setEstado(new EstadoEstable());
     }
-    
+
 }

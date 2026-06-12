@@ -25,7 +25,12 @@ public class EstadoEstable implements EstadoCarrera {
 
     @Override
     public void realizarApuesta(Carrera carrera) {
-       // acepta apuestas.
+       for (Participacion p : carrera.getParticipaciones()) {
+        if (p.getDividendo() <= 1) {
+            carrera.setEstado(new EstadoAbierta());
+            return;
+        }
+    }
     }
 
 }

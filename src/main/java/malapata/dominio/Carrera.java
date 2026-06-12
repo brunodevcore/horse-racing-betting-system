@@ -25,7 +25,7 @@ public class Carrera {
     @Getter
     private Jornada jornada;
 
-    public Carrera(int numero, String nombre){
+    public Carrera(int numero, String nombre) {
         this.numero = numero;
         this.nombre = nombre;
         this.estado = new EstadoDefinida();
@@ -41,37 +41,38 @@ public class Carrera {
         this.estado = estado;
     }
 
-    public void agregarParticipacion(Caballo caballo, int numero){
+    public void agregarParticipacion(Caballo caballo, int numero) {
         Participacion participacion = new Participacion(numero, caballo);
         participacion.setCarrera(this);
         participaciones.add(participacion);
 
     }
 
-    public void abrir(){
+    public void abrir() {
         estado.abrir(this);
     }
 
-    public void cerrar(){
+    public void cerrar() {
         estado.cerrar(this);
     }
 
-    public void finalizar(Participacion ganador){
+    public void finalizar(Participacion ganador) {
         estado.finalizar(this, ganador);
     }
 
-    public void realizarApuesta(){
+    public void realizarApuesta() {
         estado.realizarApuesta(this);
     }
 
-    public double calcularTotalApostado(){
+    public double calcularTotalApostado() {
         double total = 0;
         for (Participacion p : participaciones) {
-            total += p.calcularTotalApostado();       }
+            total += p.calcularTotalApostado();
+        }
         return total;
     }
 
-    public double calcularTotalPagado(){
+    public double calcularTotalPagado() {
         double total = 0;
         for (Participacion p : participaciones) {
             total += p.calcularTotalPagado();
@@ -83,4 +84,19 @@ public class Carrera {
         this.jornada = jornada;
     }
 
+    public void recalcularDividendos(double comision) {
+        double totalCarrera = calcularTotalApostado();
+        for (Participacion p : participaciones) {
+            p.recalcularDividendo(totalCarrera, comision);
+        }
+    }
+
+    public void pagarApuestasGanadoras() {
+        for (Apuesta apuesta : ganador.getApuestas()) {
+            double pago = apuesta.getModalidad().calcularPago(apuesta);
+            System.out.println("Pago: " + pago);
+            apuesta.setMontoCobrado(pago);
+            apuesta.getJugador().setSaldo(apuesta.getJugador().getSaldo() + pago);
+        }
+    }
 }

@@ -39,6 +39,19 @@
         </table>
     </div>
 
+    <div>
+        <h2>Acciones de Gestión</h2>
+        <button id="btnAbrirCarrera" type="button">Abrir Carrera</button>
+        <button id="btnCerrarCarrera" type="button">Cerrar Carrera</button>
+        <div style="margin-top: 12px;">
+            <label for="selectGanador">Caballo ganador:</label>
+            <select id="selectGanador">
+                <option value="">Seleccione un caballo</option>
+            </select>
+            <button id="btnFinalizarCarrera" type="button">Finalizar Carrera</button>
+        </div>
+    </div>
+
     <script type="module">
         import dispatcher from '/vistas/CommandDispatcher.js';
 
@@ -70,15 +83,17 @@
         });
 
         view.handler('redirigir', (url) => {
-                window.location.href = url; 
+                window.location.href = '/vistas/' + url;  
         });
 
         // Función para renderizar la tabla de participaciones
         function renderParticipaciones(participaciones) {
             const container = document.getElementById('participacionesContainer');
+            const selectGanador = document.getElementById('selectGanador');
             
             if (!participaciones || participaciones.length === 0) {
-                container.innerHTML = '<tr><td colspan="3">No hay participaciones registradas</td></tr>';
+                container.innerHTML = '<tr><td colspan="5">No hay participaciones registradas</td></tr>';
+                selectGanador.innerHTML = '<option value="">Seleccione un caballo</option>';
                 return;
             }
 
@@ -87,10 +102,17 @@
                     <td>${participacion.numero || '-'}</td>
                     <td>${participacion.nombreCaballo || '-'}</td>
                     <td>${participacion.dividendo || '-'}</td>
-                    <td>${participacion.totalApostado || 0}</td> 
-                    <td>${participacion.cantidadApuestas || 0}</td> 
+                    <td>${participacion.totalApostado || 0}</td>
+                    <td>${participacion.cantidadApuestas || 0}</td>
                 </tr>
             `).join('');
+
+            selectGanador.innerHTML = [
+                '<option value="">Seleccione un caballo</option>',
+                ...participaciones.map(participacion => `
+                    <option value="${participacion.numero}">${participacion.numero} - ${participacion.nombreCaballo}</option>
+                `)
+            ].join('');
         }
 
         // Funciones para manejar errores
@@ -103,6 +125,25 @@
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = '';
         }
+
+        // Botones de gestión
+        document.getElementById('btnAbrirCarrera').addEventListener('click', () => {
+            dispatcher.submit('/gestionCarrera/abrir', {});
+        });
+
+        document.getElementById('btnCerrarCarrera').addEventListener('click', () => {
+            dispatcher.submit('/gestionCarrera/cerrar', {});
+        });
+
+        document.getElementById('btnFinalizarCarrera').addEventListener('click', () => {
+            const selectGanador = document.getElementById('selectGanador');
+            const numeroParticipacion = parseInt(selectGanador.value, 10);
+            if (!numeroParticipacion) {
+                showError('Debe seleccionar un caballo ganador para finalizar la carrera.');
+                return;
+            }
+            dispatcher.submit('/gestionCarrera/finalizar', { numeroParticipacion });
+        });
 
         // Iniciar la vista al cargar
         window.addEventListener('load', () => {

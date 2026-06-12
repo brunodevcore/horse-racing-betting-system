@@ -22,6 +22,7 @@ public class EstadoCerrada implements EstadoCarrera {
     public void finalizar(Carrera carrera, Participacion ganador) {
         carrera.setEstado(new EstadoFinalizada());
         carrera.setGanador(ganador);
+        carrera.pagarApuestasGanadoras();
     }
 
     @Override

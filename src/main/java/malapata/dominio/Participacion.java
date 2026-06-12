@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Participacion {
-    
+
     @Getter
     private int numero;
 
@@ -23,7 +23,7 @@ public class Participacion {
     @Getter
     private Carrera carrera;
 
-    public Participacion(int numero, Caballo caballo){
+    public Participacion(int numero, Caballo caballo) {
         this.numero = numero;
         this.caballo = caballo;
         this.dividendo = 0;
@@ -31,11 +31,11 @@ public class Participacion {
         this.carrera = null;
     }
 
-    public void agregarApuestas(Apuesta apuesta){
+    public void agregarApuestas(Apuesta apuesta) {
         apuestas.add(apuesta);
     }
 
-    public double calcularTotalApostado(){
+    public double calcularTotalApostado() {
         double total = 0;
         for (Apuesta apuesta : apuestas) {
             total += apuesta.getMonto();
@@ -43,7 +43,7 @@ public class Participacion {
         return total;
     }
 
-    public double calcularTotalPagado(){
+    public double calcularTotalPagado() {
         double total = 0;
         for (Apuesta apuesta : apuestas) {
             total += apuesta.getMontoCobrado();
@@ -53,6 +53,16 @@ public class Participacion {
 
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
+    }
+
+    public void recalcularDividendo(double totalCarrera, double comision) {
+        if (apuestas.isEmpty()) {
+            this.dividendo = 0;
+            return;
+        }
+        double totalAlCaballo = calcularTotalApostado();
+        double dividendoCalculado = (totalCarrera * (1 - comision)) / totalAlCaballo;
+        this.dividendo = dividendoCalculado > 1 ? dividendoCalculado : 0;
     }
 
 }

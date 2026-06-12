@@ -1,10 +1,12 @@
 package malapata.dtos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import malapata.dominio.Carrera;
 import malapata.dominio.Jornada;
 
 @Getter
@@ -30,19 +32,19 @@ public class JornadaDTO {
     public JornadaDTO(Jornada jornada, double comision) {
         this.fecha = jornada.getFecha();
         this.cantidadCarreras = jornada.getCarreras().size();
-        this.carrerasFinalizadas = CarreraDTO.fromLista(
-            jornada.getCarreras().stream()
-                .filter(c -> c.getEstado().equals("Finalizada"))
-                .toList()
-        );
+        
+        List<Carrera> finalizadas = new ArrayList<>();
+        List<Carrera> proximas = new ArrayList<>();
 
-        this.proximasCarreras = CarreraDTO.fromLista(
-            jornada.getCarreras().stream()
-                .filter(c -> !c.getEstado().equals("Finalizada"))
-                .toList()
-        );
-        this.cantidadCarrerasFinalizadas = carrerasFinalizadas.size();
-        this.cantidadCarrerasProximas = proximasCarreras.size();
+        for (Carrera c : jornada.getCarreras()) {
+            if (c.getEstado().equals("Finalizada")) {
+                finalizadas.add(c);
+            } else {
+                proximas.add(c);
+            }
+        }
+        this.carrerasFinalizadas = CarreraDTO.fromLista(finalizadas);
+        this.proximasCarreras = CarreraDTO.fromLista(proximas);
 
         this.totalApostado = jornada.calcularTotalApostado();
         this.totalPagado = jornada.calcularTotalPagado();

@@ -1,5 +1,6 @@
 package malapata.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -9,7 +10,7 @@ import malapata.dominio.Participacion;
 @Getter
 @Setter
 public class ParticipacionDTO {
-  
+
     private int numero;
     private String nombreCaballo;
     private double dividendo;
@@ -29,10 +30,11 @@ public class ParticipacionDTO {
     }
 
     public static List<ParticipacionDTO> fromLista(List<Participacion> participaciones) {
-        return participaciones.stream()
-            .map(ParticipacionDTO::new)
-            .toList();
+        List<ParticipacionDTO> lista = new ArrayList<>();
+        for (Participacion p : participaciones) {
+            lista.add(new ParticipacionDTO(p));
+        }
+        return lista;
     }
-
 
 }

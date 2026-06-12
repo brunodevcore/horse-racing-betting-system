@@ -80,6 +80,7 @@ public class ServicioHipodromo {
         }
 
         carreraPasada1.setEstado(new EstadoCerrada());
+        carreraPasada1.recalcularDividendos(hipodromo.getComision());
         jornadaPasada.agregarCarrera(carreraPasada1);
 
         // carrera 2
@@ -97,6 +98,7 @@ public class ServicioHipodromo {
         }
 
         carreraPasada2.setEstado(new EstadoCerrada());
+        carreraPasada2.recalcularDividendos(hipodromo.getComision());
         jornadaPasada.agregarCarrera(carreraPasada2);
 
         hipodromo.getJornadas().add(jornadaPasada);
@@ -234,6 +236,7 @@ public class ServicioHipodromo {
         double costo = modalidad.calcularCosto(apuesta);
         jugador.descontarSaldo(costo);
         participacion.agregarApuestas(apuesta);
+        participacion.getCarrera().recalcularDividendos(hipodromo.getComision());
         participacion.getCarrera().realizarApuesta();
     }
 }
