@@ -4,6 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablero de Control - MalaPata</title>
+        <style>
+            :root{
+                --white: #ffffff;
+                --topbar: #1e3a5f; /* azul oscuro */
+                --accent: #1e3a5f;
+                --text: #333333;
+                --muted-border: #e6e9ee;
+                --card-shadow: rgba(0,0,0,0.06);
+                --number-blue: #1e3a5f;
+            }
+
+            html, body { height: 100%; }
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: var(--white);
+                color: var(--text);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                padding-top: 64px; /* espacio para la barra superior */
+            }
+
+            /* Barra superior fija */
+            h1 {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 64px;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                padding: 0 24px;
+                background: var(--topbar);
+                color: #ffffff;
+                font-size: 1.25rem;
+                font-weight: 700;
+                z-index: 1000;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            }
+
+            /* Contenido centrado */
+            body > div, main, section {
+                max-width: 1200px;
+                margin: 18px auto;
+                padding: 16px;
+                background: var(--white);
+                border: 1px solid var(--muted-border);
+                border-radius: 6px;
+                box-shadow: 0 6px 18px var(--card-shadow);
+            }
+
+            /* Mensajes de error */
+            #errorMessage{ color: #b00020; padding: 8px 12px; border-radius: 6px; }
+
+            p { margin: 6px 0; color: var(--text); }
+            strong { color: var(--text); }
+
+            /* Métricas en tarjetas: convertimos los <p> del bloque de métricas en tarjetas */
+            body > div:nth-of-type(4) {
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            body > div:nth-of-type(4) p {
+                background: var(--white);
+                border: 1px solid var(--muted-border);
+                box-shadow: 0 6px 18px var(--card-shadow);
+                padding: 14px 16px;
+                border-radius: 8px;
+                min-width: 160px;
+                flex: 1 1 180px;
+            }
+
+            body > div:nth-of-type(4) p span { display: block; font-size: 1.6rem; color: var(--number-blue); font-weight: 700; }
+
+            /* Secciones con fondo blanco y borde gris claro (ya aplicado a body > div) */
+            h2 { color: var(--topbar); margin-top: 0; }
+
+            /* Botones Gestionar */
+            button{
+                background: var(--accent);
+                color: #ffffff;
+                border: none;
+                padding: 8px 12px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 700;
+            }
+
+            button:hover{
+                opacity: 0.95;
+                transform: translateY(-1px);
+            }
+
+            /* Carreras contenedores */
+            #carrerasFinalizadasContainer > div, #proximasCarrerasContainer > div{
+                padding: 10px 12px;
+                margin: 8px 0;
+                background: var(--white);
+                border: 1px solid var(--muted-border);
+                border-radius: 6px;
+            }
+
+            /* Tablas: borde sutil */
+            table{ width:100%; border-collapse: collapse; margin-top: 8px; }
+            thead th{ background: #f8fafc; color: var(--text); padding: 10px 12px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--muted-border); }
+            tbody td{ padding: 10px 12px; border-bottom: 1px solid #f1f4f8; color: var(--text); }
+
+            @media (max-width: 900px){ body > div, main, section{ margin: 12px; padding: 12px; } button{ margin:6px 4px 0 0; } }
+        </style>
 </head>
 <body>
     <h1>Tablero de Control - MalaPata</h1>
