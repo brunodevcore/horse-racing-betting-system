@@ -58,6 +58,7 @@
 
   <script type="module">
     import dispatcher from '/vistas/CommandDispatcher.js';
+    import SSECommandDispatcher from '/vistas/SSECommandDispatcher.js';
 
     const jugadorNombre = document.getElementById('jugadorNombre');
     const jugadorSaldo = document.getElementById('jugadorSaldo');
@@ -243,7 +244,9 @@
     view.handler('error', (param) => showError(param));
 
     // Iniciar la vista
-    dispatcher.startView(view);
+    window.addEventListener('load', () => {dispatcher.startView(view);
+    new SSECommandDispatcher('/jugador/registrarSSE', dispatcher);
+  });
   </script>
 </body>
 </html>

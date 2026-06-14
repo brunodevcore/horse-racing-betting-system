@@ -6,6 +6,7 @@ import java.util.List;
 
 import lombok.Getter;
 import malapata.dominio.*;
+import malapata.observer.Observable;
 
 public class ServicioHipodromo {
 
@@ -230,13 +231,13 @@ public class ServicioHipodromo {
         return null;
     }
 
-    public void realizarApuesta(Jugador jugador, Participacion participacion, ModalidadDeApuesta modalidad,
-            double monto) {
+    public void realizarApuesta(Jugador jugador, Participacion participacion, ModalidadDeApuesta modalidad, double monto) {
         Apuesta apuesta = new Apuesta(jugador, participacion, modalidad, monto);
         double costo = modalidad.calcularCosto(apuesta);
         jugador.descontarSaldo(costo);
         participacion.agregarApuestas(apuesta);
         participacion.getCarrera().recalcularDividendos(hipodromo.getComision());
         participacion.getCarrera().realizarApuesta();
+        FachadaServicios.getInstancia().notificar(Observable.Evento.APUESTA_REALIZADA);
     }
 }

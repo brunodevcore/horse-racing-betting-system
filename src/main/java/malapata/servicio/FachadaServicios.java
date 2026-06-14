@@ -14,7 +14,9 @@ import malapata.dominio.Administrador;
 import malapata.dominio.Carrera;
 import malapata.dominio.Jugador;
 
-public class FachadaServicios {
+import malapata.observer.Observable;
+
+public class FachadaServicios extends Observable {
 
     private static FachadaServicios instancia;
 

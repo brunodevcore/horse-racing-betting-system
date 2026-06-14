@@ -4,18 +4,44 @@ import java.time.LocalDate;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import jakarta.servlet.http.HttpSession;
 import malapata.dominio.Administrador;
-import malapata.dominio.Jornada;    
+import malapata.dominio.Jornada;
 import malapata.dtos.JornadaDTO;
+import malapata.observer.Observable;
+import malapata.observer.Observador;
 import malapata.servicio.FachadaServicios;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/admin")
-public class AdminPresentador {
+@Scope("session")
+public class AdminPresentador implements Observador {
+
+    private ConexionNavegador conexionNavegador;
+    private Jornada jornadaActual;
+
+    public AdminPresentador(@Autowired ConexionNavegador conexionNavegador) {
+        this.conexionNavegador = conexionNavegador;
+        FachadaServicios.getInstancia().subscribir(this);
+    }
+
+    @Override
+    public void actualizar(Observable observable, Object evento) {
+        if (evento == Observable.Evento.APUESTA_REALIZADA || evento == Observable.Evento.ESTADO_ACTUALIZADO) {
+            if (jornadaActual != null) {
+                conexionNavegador.enviarCommands(
+                        Commands.create(new Command("jornada",
+                                new JornadaDTO(jornadaActual, FachadaServicios.getInstancia().getComision()))));
+            }
+        }
+    }
 
     @PostMapping("/inicializarVista")
     public Commands inicializarVista(HttpSession session) {
@@ -24,15 +50,15 @@ public class AdminPresentador {
         if (admin == null) {
             return Commands.create(new Command("redirigir", "loginAdmin.html"));
         }
-        Jornada jornada = FachadaServicios.getInstancia().getJornadaActual();    
-        if(jornada == null){
+        Jornada jornada = FachadaServicios.getInstancia().getJornadaActual();
+        if (jornada == null) {
             return Commands.create(new Command("error", "No hay jornadas definidas en el sistema"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
+        this.jornadaActual = jornada;
         return Commands.create(
-            new Command("nombreAdmin", admin.getNombreCompleto()),
-            new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision()))
-        );      
+                new Command("nombreAdmin", admin.getNombreCompleto()),
+                new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
     }
 
     @PostMapping("/jornada/anterior")
@@ -43,12 +69,12 @@ public class AdminPresentador {
         }
         LocalDate fechaActual = (LocalDate) session.getAttribute("fechaJornada");
         Jornada jornada = FachadaServicios.getInstancia().getJornadaAnterior(fechaActual);
-        if(jornada == null){
+        if (jornada == null) {
             return Commands.create(new Command("error", "No hay jornadas anteriores a la seleccionada"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
-        return Commands.create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
-        
+        return Commands
+                .create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
 
     }
 
@@ -60,13 +86,19 @@ public class AdminPresentador {
         }
         LocalDate fechaActual = (LocalDate) session.getAttribute("fechaJornada");
         Jornada jornada = FachadaServicios.getInstancia().getJornadaSiguiente(fechaActual);
-        if(jornada == null){
+        if (jornada == null) {
             return Commands.create(new Command("error", "No hay jornadas siguientes a la seleccionada"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
-        return Commands.create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
-      
+        return Commands
+                .create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
 
     }
-    
+
+    @GetMapping("/registrarSSE")
+    public SseEmitter registrarSSE() {
+        conexionNavegador.conectarSSE();
+        return conexionNavegador.getConexionSSE();
+    }
+
 }

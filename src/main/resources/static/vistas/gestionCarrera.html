@@ -54,6 +54,7 @@
 
     <script type="module">
         import dispatcher from '/vistas/CommandDispatcher.js';
+        import SSECommandDispatcher from '/vistas/SSECommandDispatcher.js';
 
         // Registrar la vista
         const numeroCarrera = sessionStorage.getItem('numeroCarrera');
@@ -146,8 +147,8 @@
         });
 
         // Iniciar la vista al cargar
-        window.addEventListener('load', () => {
-            dispatcher.startView(view);
+        window.addEventListener('load', () => { dispatcher.startView(view);
+            new SSECommandDispatcher('/gestionCarrera/registrarSSE', dispatcher);
         });
     </script>
 </body>
