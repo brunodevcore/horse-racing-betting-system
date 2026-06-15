@@ -117,6 +117,10 @@ public class ConfirmarApuestaPresentador {
             return Commands.create(new Command("error", "No hay modalidad disponible"));
         }
 
+        if (monto < 1) {
+            return Commands.create(new Command("error", "Monto inválido"));
+        }
+
         Apuesta apuesta = new Apuesta(jugador, participacion, modalidad, monto);
         double costo = modalidad.calcularCosto(apuesta);
 

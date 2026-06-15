@@ -130,6 +130,7 @@
             </select>
             <button id="btnFinalizarCarrera" type="button">Finalizar Carrera</button>
         </div>
+        <button id="btnVolver">Volver al Tablero</button>
     </div>
 
     <script type="module">
@@ -182,8 +183,8 @@
                 <tr>
                     <td>${participacion.numero || '-'}</td>
                     <td>${participacion.nombreCaballo || '-'}</td>
-                    <td>${participacion.dividendo || '-'}</td>
-                    <td>${participacion.totalApostado || 0}</td>
+                    <td>${formatDecimal(participacion.dividendo)}</td>
+                    <td>${formatMoney(participacion.totalApostado)}</td>
                     <td>${participacion.cantidadApuestas || 0}</td>
                 </tr>
             `).join('');
@@ -194,6 +195,14 @@
                     <option value="${participacion.numero}">${participacion.numero} - ${participacion.nombreCaballo}</option>
                 `)
             ].join('');
+        }
+
+        function formatDecimal(value) {
+            return value ? value.toFixed(2) : '-';
+        }
+
+        function formatMoney(value) {
+            return (value || 0).toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         // Funciones para manejar errores
@@ -224,6 +233,10 @@
                 return;
             }
             dispatcher.submit('/gestionCarrera/finalizar', { numeroParticipacion });
+        });
+
+        document.getElementById('btnVolver').addEventListener('click', () => {
+            window.location.href = '/vistas/tableroAdmin.html';
         });
 
         // Iniciar la vista al cargar

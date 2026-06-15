@@ -192,7 +192,8 @@ public class ServicioHipodromo {
     public List<Apuesta> getApuestasJugador(Jugador jugador) {
         List<Apuesta> apuestasJugador = new ArrayList<>();
 
-        for (Jornada j : hipodromo.getJornadas()) {
+        for (int i = hipodromo.getJornadas().size() - 1; i >= 0; i--) {
+            Jornada j = hipodromo.getJornadas().get(i);
             for (Carrera c : j.getCarreras()) {
                 for (Participacion p : c.getParticipaciones()) {
                     for (Apuesta a : p.getApuestas()) {
@@ -231,7 +232,8 @@ public class ServicioHipodromo {
         return null;
     }
 
-    public void realizarApuesta(Jugador jugador, Participacion participacion, ModalidadDeApuesta modalidad, double monto) {
+    public void realizarApuesta(Jugador jugador, Participacion participacion, ModalidadDeApuesta modalidad,
+            double monto) {
         Apuesta apuesta = new Apuesta(jugador, participacion, modalidad, monto);
         double costo = modalidad.calcularCosto(apuesta);
         jugador.descontarSaldo(costo);

@@ -73,6 +73,7 @@ public class AdminPresentador implements Observador {
             return Commands.create(new Command("error", "No hay jornadas anteriores a la seleccionada"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
+        this.jornadaActual = jornada;
         return Commands
                 .create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
 
@@ -90,6 +91,7 @@ public class AdminPresentador implements Observador {
             return Commands.create(new Command("error", "No hay jornadas siguientes a la seleccionada"));
         }
         session.setAttribute("fechaJornada", jornada.getFecha());
+        this.jornadaActual = jornada;
         return Commands
                 .create(new Command("jornada", new JornadaDTO(jornada, FachadaServicios.getInstancia().getComision())));
 

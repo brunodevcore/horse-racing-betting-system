@@ -145,13 +145,17 @@
             document.getElementById('dividendoActual').textContent = data.dividendoActual || '-';
             document.getElementById('modalidad').textContent = data.nombreModalidad || '-';
             
-            document.getElementById('montoApostar').textContent = '$' + (data.monto || 0);
-            document.getElementById('montoGana').textContent = '$' + (data.montoSiGana || 0);
-            document.getElementById('montoPagar').textContent = '$' + (data.montoAPagar || 0);
+            document.getElementById('montoApostar').textContent = formatMoney(data.monto);
+            document.getElementById('montoGana').textContent = formatMoney(data.montoSiGana);
+            document.getElementById('montoPagar').textContent = formatMoney(data.montoAPagar);
 
             document.getElementById('loading').style.display = 'none';
             document.getElementById('apuestaSection').style.display = 'block';
         });
+
+        function formatMoney(value) {
+            return '$ ' + (value || 0).toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
         view.handler('redirigir', (data) => {
             window.location.href = '/vistas/' + data;

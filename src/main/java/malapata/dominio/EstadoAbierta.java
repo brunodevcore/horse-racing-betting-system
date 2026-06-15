@@ -16,8 +16,7 @@ public class EstadoAbierta implements EstadoCarrera {
 
     @Override
     public void cerrar(Carrera carrera) {
-        throw new CarreraException("No se puede cerrar una carrera que está abierta. Primero debe finalizarla.");
-    }
+        throw new CarreraException("No es posible cerrar esta carrera.");    }
 
     @Override
     public void finalizar(Carrera carrera, Participacion ganador) {

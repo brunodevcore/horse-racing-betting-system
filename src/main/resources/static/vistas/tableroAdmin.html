@@ -122,8 +122,9 @@
     
     <div id="errorMessage"></div>
 
-    <div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
         <p>Administrador: <strong id="nombreAdmin">Cargando...</strong></p>
+        <button id="btnCerrarSesion">Cerrar Sesión</button>
     </div>
 
     <div>
@@ -174,15 +175,23 @@
             document.getElementById('cantidadFinalizadas').textContent = data.cantidadCarrerasFinalizadas || 0;
             document.getElementById('cantidadFaltanCorrer').textContent = data.cantidadCarrerasProximas || 0;
 
-            document.getElementById('totalApostado').textContent = data.totalApostado || 0;
-            document.getElementById('totalPagado').textContent = data.totalPagado || 0;
-            document.getElementById('totalComisiones').textContent = data.totalComisiones || 0;
-            document.getElementById('balance').textContent = data.balance || 0; 
+            document.getElementById('totalPagado').textContent = formatMoney(data.totalPagado);
+            document.getElementById('totalComisiones').textContent = formatMoney(data.totalComisiones);
+            document.getElementById('balance').textContent = formatMoney(data.balance);
+            document.getElementById('totalApostado').textContent = formatMoney(data.totalApostado);
 
             renderCarrerasFinalizadas(data.carrerasFinalizadas || []);
             renderProximasCarreras(data.proximasCarreras || []);
             clearError();
         });
+
+        function formatMoney(value) {
+            return (value || 0).toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatDecimal(value) {
+            return value ? value.toFixed(2) : '-';
+        }
 
         view.handler('error', (data) => {
             showError(data);
@@ -200,10 +209,12 @@
             container.innerHTML = carreras.map(carrera => `
                 <div>
                     <h3>${carrera.nombre} (Carrera #${carrera.numero})</h3>
-                    <p>Estado: ${carrera.estado}</p>
+                    <p>Hora de finalización: ${carrera.horaFinalizacion || '-'}</p>
                     <p>Caballos: ${carrera.cantidadCaballos}</p>
+                    <p>Total Apostado: $ ${formatMoney(carrera.totalApostado)}</p>
+                    <p>Total Pagado: $ ${formatMoney(carrera.totalPagado)}</p>
                     <p>Ganador: ${carrera.nombreGanador || 'N/A'}</p>
-                </div>
+                    <p>Dividendo Final: ${formatDecimal(carrera.dividendoGanador)}</p></div>
             `).join('');
         }
 
@@ -220,6 +231,8 @@
                     <h3>${carrera.nombre} (Carrera #${carrera.numero})</h3>
                     <p>Estado: ${carrera.estado}</p>
                     <p>Caballos: ${carrera.cantidadCaballos}</p>
+                    <p>Total Apostado: $ ${formatMoney(carrera.totalApostado)}</p>
+                    <p>Cantidad de Apuestas: ${carrera.cantidadApuestas || 0}</p>
                     <button onclick="gestionar(${carrera.numero})">Gestionar</button>
                 </div>
             `).join('');
@@ -250,11 +263,19 @@
             window.location.href = '/vistas/gestionCarrera.html';
         }
 
+        view.handler('redirigir', (url) => {
+            window.location.href = '/vistas/' + url;
+        });
 
         // Iniciar la vista al cargar
         window.addEventListener('load', () => {dispatcher.startView(view);
         new SSECommandDispatcher('/admin/registrarSSE', dispatcher);
-        });
+        
+        document.getElementById('btnCerrarSesion').addEventListener('click', () => {
+      dispatcher.submit('/logout', {});
+    });
+    
+    });
     </script>
 </body>
 </html>

@@ -13,7 +13,7 @@ import malapata.dominio.Jornada;
 @Setter
 public class JornadaDTO {
 
-    private LocalDate fecha;
+    private String fecha;
     private List<CarreraDTO> carrerasFinalizadas;
     private List<CarreraDTO> proximasCarreras;
     private int cantidadCarreras;
@@ -30,9 +30,9 @@ public class JornadaDTO {
     }
 
     public JornadaDTO(Jornada jornada, double comision) {
-        this.fecha = jornada.getFecha();
+        this.fecha = jornada.getFecha().toString();
         this.cantidadCarreras = jornada.getCarreras().size();
-        
+
         List<Carrera> finalizadas = new ArrayList<>();
         List<Carrera> proximas = new ArrayList<>();
 
@@ -43,12 +43,14 @@ public class JornadaDTO {
                 proximas.add(c);
             }
         }
+
         this.carrerasFinalizadas = CarreraDTO.fromLista(finalizadas);
         this.proximasCarreras = CarreraDTO.fromLista(proximas);
-
+        this.cantidadCarrerasFinalizadas = carrerasFinalizadas.size();
+        this.cantidadCarrerasProximas = proximasCarreras.size();
         this.totalApostado = jornada.calcularTotalApostado();
         this.totalPagado = jornada.calcularTotalPagado();
         this.balance = totalApostado - totalPagado;
-        this.totalComisiones = balance * comision;
+        this.totalComisiones = totalApostado * comision;
     }
 }

@@ -93,9 +93,12 @@
 <body>
   <main>
     <h1>Tablero del Jugador</h1>
-
+    
     <section id="jugadorSection">
-      <h2>Jugador</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Jugador</h2>
+        <button id="btnCerrarSesion">Cerrar Sesión</button>
+      </div>
       <div id="jugador">
         <p><strong>Nombre:</strong> <span id="jugadorNombre">-</span></p>
         <p><strong>Saldo:</strong> <span id="jugadorSaldo">-</span></p>
@@ -170,9 +173,9 @@
     function renderJugador(jugador) {
       if (!jugador) return;
       jugadorNombre.textContent = jugador.nombreCompleto ?? '-';
-      jugadorSaldo.textContent = jugador.saldo ?? '-';
-      jugadorTotalApostado.textContent = jugador.totalApostado ?? '-';
-      jugadorTotalGanado.textContent = jugador.totalGanado ?? '-';
+      jugadorSaldo.textContent = formatMoney(jugador.saldo);
+      jugadorTotalApostado.textContent = formatMoney(jugador.totalApostado);
+      jugadorTotalGanado.textContent = formatMoney(jugador.totalGanado);
     }
 
     function renderCarreras(carreras) {
@@ -228,7 +231,7 @@
           carrera.participaciones.forEach(p => {
             const li = document.createElement('li');
             const span = document.createElement('span');
-            span.textContent = `#${p.numero} ${p.nombreCaballo} (Dividendo: ${p.dividendo})`;
+            span.textContent = `#${p.numero} ${p.nombreCaballo} (Dividendo: ${p.dividendo > 1 ? formatDecimal(p.dividendo) : 'S/E'})`;
             
             const botonApostar = document.createElement('button');
             botonApostar.type = 'button';
@@ -268,6 +271,14 @@
       });
     }
 
+    function formatDecimal(value) {
+      return value ? value.toFixed(2) : '-';
+    }
+
+    function formatMoney(value) {
+      return '$ ' + (value || 0).toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function renderModalidades(modalidades) {
       modalidadesDisponibles = Array.isArray(modalidades) ? modalidades : [];
       modalidadesList.innerHTML = '';
@@ -305,10 +316,10 @@
         add(a.nombreCarrera);
         add(a.numeroCaballo);
         add(a.nombreCaballo);
-        add(a.monto);
+        add(formatMoney(a.monto));
         add(a.tipoApuesta);
-        add(a.montoCobrado);
-        add(a.dividendo);
+        add(formatMoney(a.montoCobrado));
+        add(formatDecimal(a.dividendo));
         add(a.estado);
 
         misApuestasBody.appendChild(tr);
@@ -328,9 +339,17 @@
     view.handler('misApuestas', renderMisApuestas);
     view.handler('error', (param) => showError(param));
 
+    view.handler('redirigir', (url) => {
+            window.location.href = '/vistas/' + url;
+        });
+
     // Iniciar la vista
     window.addEventListener('load', () => {dispatcher.startView(view);
     new SSECommandDispatcher('/jugador/registrarSSE', dispatcher);
+
+    document.getElementById('btnCerrarSesion').addEventListener('click', () => {
+      dispatcher.submit('/logout', {});
+    });
   });
   </script>
 </body>

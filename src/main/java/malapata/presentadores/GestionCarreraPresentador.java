@@ -112,7 +112,7 @@ public class GestionCarreraPresentador implements Observador {
         }
         carrera.finalizar(ganador);
         FachadaServicios.getInstancia().notificar(Observable.Evento.ESTADO_ACTUALIZADO);
-        return Commands.create(new Command("carrera", new CarreraDTO(carrera)));
+        return Commands.create(new Command("redirigir", "tableroAdmin.html"));
     }
 
     @GetMapping("/registrarSSE")

@@ -1,5 +1,6 @@
 package malapata.dominio;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class Carrera {
 
     @Getter
     private Jornada jornada;
+
+    @Getter
+    private LocalDateTime horaFinalizacion;
 
     public Carrera(int numero, String nombre) {
         this.numero = numero;
@@ -98,5 +102,9 @@ public class Carrera {
             apuesta.setMontoCobrado(pago);
             apuesta.getJugador().setSaldo(apuesta.getJugador().getSaldo() + pago);
         }
+    }
+
+    public void setHoraFinalizacion() {
+        this.horaFinalizacion = LocalDateTime.now();
     }
 }
