@@ -179,7 +179,7 @@
     }
 
     function renderCarreras(carreras) {
-      if (!Array.isArray(carreras)) {
+      if (!Array.isArray(carreras) || carreras.length === 0) {
         carrerasDisponiblesEl.textContent = 'No hay carreras disponibles';
         return;
       }

@@ -20,9 +20,9 @@ public class EstadoCerrada implements EstadoCarrera {
 
     @Override
     public void finalizar(Carrera carrera, Participacion ganador) {
-        carrera.setEstado(new EstadoFinalizada());
-        carrera.setHoraFinalizacion();
         carrera.setGanador(ganador);
+        carrera.setEstado(new EstadoFinalizada());
+        carrera.setHoraFinalizacion();                                                         
         carrera.pagarApuestasGanadoras();
         
     }
