@@ -31,3 +31,17 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Logs
+*.log
+hs_err_*
+replay_pid*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
