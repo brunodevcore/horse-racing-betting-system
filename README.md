@@ -68,8 +68,8 @@ mvnw.cmd spring-boot:run
 
 Acceder desde el navegador:
 
-- **Administrador:** [http://localhost:8080/loginAdmin.html](http://localhost:8080/loginAdmin.html)
-- **Jugador:** [http://localhost:8080/loginJugador.html](http://localhost:8080/loginJugador.html)
+- **Administrador:** [http://localhost:8080/vistas/loginAdmin.html](http://localhost:8080/vistas/loginAdmin.html)
+- **Jugador:** [http://localhost:8080/vistas/loginJugador.html](http://localhost:8080/vistas/loginJugador.html)
 
 **Credenciales de prueba precargadas:**
 
