@@ -2,7 +2,7 @@
 
 Aplicación web para la gestión de un hipódromo: administración de carreras y jugadores, con un sistema de apuestas de múltiples modalidades y cálculo dinámico de dividendos en tiempo real.
 
-Proyecto académico desarrollado en la carrera de Analista en Tecnologías de la Información (Universidad ORT Uruguay).
+Proyecto personal de desarrollo backend con Java y Spring Boot, aplicando patrones de diseño y arquitectura en capas.
 
 ---
 
