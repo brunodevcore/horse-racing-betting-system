@@ -21,7 +21,7 @@ class SSECommandDispatcher {
    * @param {Function} onConnectionClosed - Callback opcional cuando el servidor cierra la conexión
    */
   constructor(url, commandDispatcher, onConnectionClosed) {
-    // Validar commandDispatcher (obligatorio)
+    // Validar commandDispatcher (requerido)
     if (!commandDispatcher) {
       throw new Error('Invalid CommandDispatcher: commandDispatcher parameter is required');
     }

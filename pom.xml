@@ -8,12 +8,12 @@
 		<version>4.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ort.edu.uy</groupId>
-	<artifactId>malapata</artifactId>
+	<groupId>com.brunorivero.betting</groupId>
+	<artifactId>horse-racing-betting-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+	<name>Horse Racing Betting System</name>
+	<description>A simple horse racing betting system</description>
+	<url>https://github.com/brunorivero/horse-racing-betting-system</url>
 	<licenses>
 		<license/>
 	</licenses>
